@@ -27,6 +27,7 @@ EXIT = False
 # Instruction thread #
 ######################
 def execute(name: str):
+    # Take some time to "execute"
     time.sleep(random.expovariate(1))
 
     # 20% failure rate ... maybe.
@@ -41,23 +42,21 @@ def executor(sync: Sync):
         # Reset event.
         sync.ready.clear()
 
-        # Check for exit condition.
-        if sync.stop.is_set():
-            return
+        while True:
+            # Check for exit condition.
+            if sync.stop.is_set():
+                return
 
-        # Try to get the next instruction in the queue
-        try:
-            name = sync.instructions.get(block=False)
+            # Try to get the next instruction in the queue
+            try:
+                name = sync.instructions.get(block=False)
 
-        except queue.Empty:
-            name = ''
+            except queue.Empty:
+                break
 
-        if not name:
-            continue
-
-        result = execute(name)
-        if result:
-            sync.poll.set()
+            result = execute(name)
+            if result:
+                sync.poll.set()
 
 
 ##################
