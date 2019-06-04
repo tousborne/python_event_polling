@@ -11,8 +11,8 @@ The prototype is divided into the following threads:
 The general flow of work is:
 
 * When a "poll" event occurs, poll for instructions
-	** Add any instructions to the instructions queue
-	** Create a "ready" event
+	* Add any instructions to the instructions queue
+	* Create a "ready" event
 * When a "ready" event occurs, pull an instruction from the queue and execute it
-	** If the instruction executes successfully, create a "poll" event.
+	* If the instruction executes successfully, create a "poll" event.
 * Create a "poll" event on a regular interval.  The poll events have to come from somewhere.
